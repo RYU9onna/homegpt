@@ -8,7 +8,7 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 @app.route("/webhook", methods=["POST"])
 def webhook():
     req = request.get_json(force=True)
-    user_input = req["handler"]["intent"]["query"]
+    user_input = req.get("handler", {}).get("intent", {}).get("query", "")
     response = generate_response(req, user_input)
     return jsonify(response)
 
