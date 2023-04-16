@@ -9,7 +9,16 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 def webhook():
     req = request.get_json(force=True)
     user_input = req["queryResult"]["queryText"]
-    response = generate_response(user_input)
+    response_text = generate_response(user_input)
+    response = {
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [response_text]
+                }
+            }
+        ]
+    }
     return jsonify(response)
 
 def generate_response(prompt):
@@ -22,7 +31,7 @@ def generate_response(prompt):
         temperature=0.7,
     )
     message = response.choices[0].text.strip()
-    return {"fulfillmentText": message}
+    return message
 
 if __name__ == "__main__":
     app.run(debug=True)
