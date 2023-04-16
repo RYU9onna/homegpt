@@ -9,10 +9,10 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 def webhook():
     req = request.get_json(force=True)
     user_input = req["handler"]["input"]["query"]
-    response = generate_response(user_input)
+    response = generate_response(req, user_input)
     return jsonify(response)
 
-def generate_response(prompt):
+def generate_response(req, prompt):
     response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=prompt,
