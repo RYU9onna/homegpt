@@ -13,20 +13,15 @@ def webhook():
     return jsonify(response)
 
 def generate_response(req, prompt):
-    if prompt == "your_intent_name":
-        message = "your_response"
-    elif prompt == "another_intent_name":
-        message = "another_response"
-    else:
-        response = openai.Completion.create(
-            engine="text-davinci-002",
-            prompt=prompt,
-            max_tokens=150,
-            n=1,
-            stop=None,
-            temperature=0.7,
-        )
-        message = response.choices[0].text.strip()
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=f"{prompt}\n\nChatbot:",
+        max_tokens=150,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
+    message = response.choices[0].text.strip()
 
     return {
         "session": {
